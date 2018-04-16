@@ -2,79 +2,84 @@
     <head>
         
         <script>
-            
-            (function() {
-                console.log('%cHello. To bring up your list of tasks, type: ' + '%clist()', 'background: #ddd; color: black', 'background: #555; color: white');
-                console.log('%cTo add new task, type: ' + '%caddTask("new task")', 'background: #ddd; color: black', 'background: #555; color: white');
-                console.log('%cTo delete a task, type: ' + '%cdeleteTask(task number)', 'background: #ddd; color: black', 'background: #555; color: white');
-                console.log('%cTo change status of task to "done" or "not done", type: ' + '%cchangeStatus(task number)', 'background: #ddd; color: black', 'background: #555; color: white');
-            }())
-            
-            var list = [];
-            
-            function addTask (task) {
-                var newTask = [list.length+1, task, false];
-                var taskList = this.list.push(newTask);
-                console.log("You added task: " + newTask[1]);
 
-            }
-            
-            function taskList() {
-                var list = this.list;
-                
-                function show(element, index, array) {
-                        console.log(element[0] + ". " + element[1]);
-                        if (element[2] == true) {
-                            console.log('%cDONE', 'background: #ddd; color: black');
-                        } else {
-                            console.log('%cNOT DONE', 'background: #555; color: white');
+                var task = (function() {
+
+                    (function() {
+                        console.log('%cHello. To bring up your list of tasks, type: ' + '%ctask.list()', 'background: #ddd; color: black', 'background: #555; color: white');
+                        console.log('%cTo add new task, type: ' + '%ctask.add("new task")', 'background: #ddd; color: black', 'background: #555; color: white');
+                        console.log('%cTo delete a task, type: ' + '%ctask.delete(task number)', 'background: #ddd; color: black', 'background: #555; color: white');
+                        console.log('%cTo change status of task to "done" or "not done", type: ' + '%ctask.status(task number)', 'background: #ddd; color: black', 'background: #555; color: white');
+                    }())
+                    
+                    var list = [];
+                    
+                    function addTask (task) {
+                        var newTask = [list.length+1, task, false];
+                        list.push(newTask);
+                        console.log("You added task: " + newTask[1]);
+        
+                    }
+                    
+                    function taskList() {
+                        
+                        function show(element, index, array) {
+                                console.log(element[0] + ". " + element[1]);
+                                if (element[2] == true) {
+                                    console.log('%cDONE', 'background: #ddd; color: black');
+                                } else {
+                                    console.log('%cNOT DONE', 'background: #555; color: white');
+                                }
+                            }
+        
+                        var tasks = list.length;
+                        console.log("%cYour list contains " + tasks + " tasks.", "background: #bbb; color: blue")
+                        
+                        list.forEach(show);
+        
+                    }
+                    
+                    
+                    function deleteTask(id) {
+        
+                        for (var i = 0; i < list.length; i++) {
+                            if (list[i][0] == id) {
+                                var removedTask = list.splice(i, 1);
+                                console.log("You removed task: " + removedTask);
+                            }
+                        }
+                    }
+        
+                    function changeStatus(id) {
+                        for (var i = 0; i < list.length; i++) {
+                            if (list[i][0] == id) {
+                                var fromStatus = "";
+                                var toStatus = "";
+        
+                                var changedStatus = !list[i][2];
+        
+                                list[i][2] = changedStatus;
+                                if (changedStatus == true) {
+                                    fromStatus = " not done ";
+                                    toStatus = " done.";
+        
+                                } else {
+                                    fromStatus = " done ";
+                                    toStatus = " not done.";
+                                }
+        
+                                console.log("You changed status for: " + list[i][1] + " from " + fromStatus + " to " + toStatus);
+                            }
                         }
                     }
 
-                var tasks = list.length;
-                console.log("%cYour list contains " + tasks + " tasks.", "background: #bbb; color: blue")
-                
-                list.forEach(show);
-
-            }
-            
-            
-            function deleteTask(id) {
-                var list = this.list;
-
-                for (var i = 0; i < list.length; i++) {
-                    if (list[i][0] == id) {
-                        var removedTask = list.splice(i, 1);
-                        console.log("You removed task: " + removedTask);
-                    }
-                }
-            }
-
-            function changeStatus(id) {
-                var list = this.list;
-
-                for (var i = 0; i < list.length; i++) {
-                    if (list[i][0] == id) {
-                        var fromStatus = "";
-                        var toStatus = "";
-
-                        var changedStatus = !list[i][2];
-
-                        list[i][2] = changedStatus;
-                        if (changedStatus == true) {
-                            fromStatus = " not done ";
-                            toStatus = " done.";
-
-                        } else {
-                            fromStatus = " done ";
-                            toStatus = " not done.";
-                        }
-
-                        console.log("You changed status for: " + list[i][1] + " from " + fromStatus + " to " + toStatus);
-                    }
-                }
-            }
-            
+                return {
+                    add: addTask,
+                    list: taskList,
+                    status: changeStatus,
+                    delete: deleteTask
+                };
+                })();
         </script>
         
     </head>
