@@ -1,0 +1,52 @@
+<html>
+    <head>
+        
+        <script>
+            
+            (function() {
+                console.log('%cHello. To bring up your list of tasks, type: ' + '%clist()', 'background: #ddd; color: black', 'background: #555; color: white');
+                console.log('%cTo add new task, type: ' + '%caddTask("new task")', 'background: #ddd; color: black', 'background: #555; color: white');
+                console.log('%cTo delete a task, type: ' + '%cdeleteTask(task number)', 'background: #ddd; color: black', 'background: #555; color: white');
+                
+            }())
+            
+            var list = [];
+            
+            function addTask (task) {
+                var newTask = [list.length+1, task, false];
+                var taskList = this.list.push(newTask);
+                console.log("You added task: " + newTask);
+
+            }
+            
+            function taskList() {
+                var list = this.list;
+                
+                function show(element, index, array) {
+                        console.log(element[0] + ". " + element[1]);
+                    }
+
+                var tasks = list.length;
+                console.log("Your list contains " + tasks + " tasks.")
+                
+                list.forEach(show);
+
+            }
+            
+            
+            function deleteTask(id) {
+                var list = this.list;
+
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i][0] == id) {
+                        var removedTask = list.splice(i, 1);
+                        console.log("You removed task: " + removedTask);
+                    }
+                }
+            }
+            
+        </script>
+        
+    </head>
+    <body></body>
+</html>
