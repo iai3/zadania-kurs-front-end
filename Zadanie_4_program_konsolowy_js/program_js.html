@@ -6,6 +6,7 @@
                 var task = (function() {
 
                     (function() {
+                        console.log(this);
                         console.log('%cHello. To bring up your list of tasks, type: ' + '%ctask.list()', 'background: #ddd; color: black', 'background: #555; color: white');
                         console.log('%cTo add new task, type: ' + '%ctask.add("new task")', 'background: #ddd; color: black', 'background: #555; color: white');
                         console.log('%cTo delete a task, type: ' + '%ctask.delete(task number)', 'background: #ddd; color: black', 'background: #555; color: white');
