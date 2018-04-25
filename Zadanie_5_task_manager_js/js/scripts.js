@@ -163,18 +163,20 @@ var task = (function() {
 
                     // CHECK IF TASK IS CHECKED
                     function checkedDelete() {
+                        if (confirm('Are you sure you want to delete those tasks?')) {
+                            for (var i = 0; i < list.length; i++) {
+                                var task = document.getElementById("task-id-" + list[i][0]);
+                                var isChecked = task.checked;
 
-                        for (var i = 0; i < list.length; i++) {
-                            var task = document.getElementById("task-id-" + list[i][0]);
-                            var isChecked = task.checked;
-
-                            if (isChecked) {
-                                deleteTask(list[i][0]);
-                                i--;
+                                if (isChecked) {
+                                    deleteTask(list[i][0]);
+                                    i--;
+                                    
+                                }
                             }
-                        }
 
-                        showTasks();
+                            showTasks();
+                        } else {}
 
                     }
 
