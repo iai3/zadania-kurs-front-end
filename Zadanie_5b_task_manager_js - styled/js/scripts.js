@@ -27,8 +27,13 @@
 
 
                     // elements for sorting
-                     var wholeTable = document.getElementById("wholeTable");
-                     var ths = wholeTable.querySelectorAll("thead th");
+                    var wholeTable = document.getElementById("wholeTable");
+                    var ths = wholeTable.querySelectorAll("thead th");
+
+                    // error messages
+                    var taskIsEmpty = document.getElementById("taskIsEmpty");
+                    var noFinishedTasks = document.getElementById("noFinishedTasks");
+
 
 
                     function storage() {
@@ -46,11 +51,10 @@
                         if(!localStorage.getItem('idNumbers')) {
                             var idNumbers = 0;
                             localStorage.setItem('idNumbers', JSON.stringify(idNumbers));
-                            return idNumbers;
                           } else {
                             var idNumbers = JSON.parse(localStorage.getItem('idNumbers'));
+                            }
                             return idNumbers;
-                          }
 
                     }
 
@@ -92,6 +96,18 @@
                         });
                     }
 
+                    // check if there are finished tasks, and change "remove all finished" button status
+                    function checkFinished() {
+                        for (var i = 0; i < list.length; i++) {
+                            if (list[i][4] == true) {
+                                deleteAllButton.classList.add("active");
+                                deleteAllButton.classList.remove("disabled");
+                                noFinishedTasks.classList.add("d-none");
+                                noFinishedTasks.classList.remove("d-inline");
+                            }
+                        }
+                    }
+
                     // SHOW TASKS - VISUAL ONLY
                     function showTasks() {
                         tasksTable.innerHTML = "";
@@ -104,25 +120,32 @@
 
                             if (list[i][4] == true) {
                                 status = "DONE";
-            
+                                row.classList.add("finished");
                             } else {
                                 status = "not done";
+                                row.classList.remove("finished");
                             }
 
                             var cell1 = row.insertCell(0);
-                            cell1.innerHTML = '<input type="checkbox" class="checkbox" id="task-id-' + list[i][0] +'">' // +  list[i][0];
+                            cell1.innerHTML = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input checkbox" id="task-id-' + list[i][0] +'"><label class="custom-control-label" for="task-id-' + list[i][0] + '"></label></div>';
                             var cell2 = row.insertCell(1);
-                            cell2.innerHTML = list[i][2];
+                            cell2.innerHTML = list[i][3];
                             var cell3 = row.insertCell(2);
-                            cell3.innerHTML = list[i][3];
-                            var cell4 = row.insertCell(3);
-                            cell4.innerHTML = status;
+                            cell3.innerHTML = list[i][1] + "<br>" + list[i][2];
 
                             //localStorage.setItem('taskList', JSON.stringify(list));
                             
 
                             
                         }
+
+                        deleteAllButton.classList.remove("active");
+                        deleteAllButton.classList.add("disabled");
+
+                        clearErrors();
+                        checkFinished();
+
+                        
 
                         for (var i = 0; i < list.length; i++) {
                             isCheckbox(i);
@@ -137,20 +160,32 @@
 
                     }
 
+                    function clearErrors(){
+                        noFinishedTasks.classList.add("d-none");
+                        noFinishedTasks.classList.remove("d-inline");
+                        taskIsEmpty.classList.add("d-none");
+                        taskIsEmpty.classList.remove("d-inline");
+                    }
+
                     
 
                     // ADD TASK
-                    function addTask () {
+                    function addTask (event) {
                         event.preventDefault();
                         //var list = storage();
-                        idNumbers++;
-
+                        
                         if(formInput.value == false) {
                             console.log("New task cannot be empty!");
+                            taskIsEmpty.classList.remove("d-none");
+                            taskIsEmpty.classList.add("d-inline");
 
                         } else {
+                        
+                        clearErrors();
+
                         var newTask = [idNumbers, getTimeAndDate()[0], getTimeAndDate()[1], formInput.value, false];
                         list.push(newTask);
+                        idNumbers++;
 
                         saveList();
                         
@@ -202,21 +237,26 @@
 
                     // find all with status 'done'
                     function checkedDeleteAll() {
-                        if (confirm('Are you sure you want to delete all finished tasks?')) {
-                            for (var i = 0; i < list.length; i++) {
-                                var status = list[i][4];
-                                if(list[i][4] === true) {
-                                    deleteTask(list[i][0]);
-                                    i--;
+                        if (deleteAllButton.classList.contains("active")) {
+                            if (confirm('Are you sure you want to delete all finished tasks?')) {
+                                for (var i = 0; i < list.length; i++) {
+                                    var status = list[i][4];
+                                    if(list[i][4] === true) {
+                                        deleteTask(list[i][0]);
+                                        i--;
+                                    }
                                 }
+    
+                                showTasks();
                             }
-
-                            showTasks();
-                        } else {}
+                        } else {
+                            noFinishedTasks.classList.remove("d-none");
+                            noFinishedTasks.classList.add("d-inline");
+                        }
+                        
 
                     }
 
-                    // CHANGE STATUS, CONSOLE ONLY
                     function changeStatus(id) {
                         for (var i = 0; i < list.length; i++) {
                             if (list[i][0] == id) {
@@ -227,6 +267,8 @@
                                 deleteButton.classList.add("disabled");
                                 statusButton.classList.remove("active");
                                 statusButton.classList.add("disabled");
+
+                                //order = (target.className === '' || target.className === 'desc') ? 'asc' : 'desc';
                             }
                         }
                     }
@@ -255,16 +297,9 @@
                         var date = new Date().toLocaleDateString();
 
                         time = time.slice(0,5);
+                        date = date.slice(0,6) + date.slice(8,10);
 
                         var timeAndDate = [time, date];
-
-
-                        //var days = Math.floor(timeNow / (1000 * 60 * 60 * 24));
-                        //var hours = Math.floor((timeNow % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        //var minutes = Math.floor((timeNow % (1000 * 60 * 60)) / (1000 * 60));
-                        //var seconds = Math.floor((timeNow % (1000 * 60)) / 1000);
-
-                        //var timestamp = hours + ':' + minutes;
 
                         return timeAndDate;
                     }
