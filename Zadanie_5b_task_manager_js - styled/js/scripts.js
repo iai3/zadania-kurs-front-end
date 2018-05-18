@@ -33,6 +33,7 @@
                     // error messages
                     var taskIsEmpty = document.getElementById("taskIsEmpty");
                     var noFinishedTasks = document.getElementById("noFinishedTasks");
+                    var noCheckedTasks = document.getElementById("noCheckedTasks");
 
 
 
@@ -131,7 +132,7 @@
                             var cell2 = row.insertCell(1);
                             cell2.innerHTML = list[i][3];
                             var cell3 = row.insertCell(2);
-                            cell3.innerHTML = list[i][1] + "<br>" + list[i][2];
+                            cell3.innerHTML = list[i][2] + "<br>" + list[i][1];
 
                             //localStorage.setItem('taskList', JSON.stringify(list));
                             
@@ -165,6 +166,8 @@
                         noFinishedTasks.classList.remove("d-inline");
                         taskIsEmpty.classList.add("d-none");
                         taskIsEmpty.classList.remove("d-inline");
+                        noCheckedTasks.classList.add("d-none");
+                        noCheckedTasks.classList.remove("d-inline");
                     }
 
                     
@@ -176,6 +179,7 @@
                         
                         if(formInput.value == false) {
                             console.log("New task cannot be empty!");
+                            clearErrors();
                             taskIsEmpty.classList.remove("d-none");
                             taskIsEmpty.classList.add("d-inline");
 
@@ -218,20 +222,29 @@
 
                     // CHECK IF TASK IS CHECKED
                     function checkedDelete() {
-                        if (confirm('Are you sure you want to delete those tasks?')) {
-                            for (var i = 0; i < list.length; i++) {
-                                var task = document.getElementById("task-id-" + list[i][0]);
-                                var isChecked = task.checked;
-
-                                if (isChecked) {
-                                    deleteTask(list[i][0]);
-                                    i--;
-                                    
+                        if (deleteButton.classList.contains("active")) {
+                            if (confirm('Are you sure you want to delete those tasks?')) {
+                                for (var i = 0; i < list.length; i++) {
+                                    var task = document.getElementById("task-id-" + list[i][0]);
+                                    var isChecked = task.checked;
+    
+                                    if (isChecked) {
+                                        deleteTask(list[i][0]);
+                                        i--;
+                                        
+                                    }
                                 }
+    
+                                showTasks();
                             }
+                        } else {
+                            clearErrors();
+                            noCheckedTasks.classList.remove("d-none");
+                            noCheckedTasks.classList.add("d-inline");
+                        }
+                        
 
-                            showTasks();
-                        } else {}
+
 
                     }
 
@@ -250,6 +263,7 @@
                                 showTasks();
                             }
                         } else {
+                            clearErrors();
                             noFinishedTasks.classList.remove("d-none");
                             noFinishedTasks.classList.add("d-inline");
                         }
@@ -268,7 +282,6 @@
                                 statusButton.classList.remove("active");
                                 statusButton.classList.add("disabled");
 
-                                //order = (target.className === '' || target.className === 'desc') ? 'asc' : 'desc';
                             }
                         }
                     }
@@ -276,21 +289,27 @@
                     // FIND CHECKED AND CHANGE THEIR STATUS
                     function checkedStatus() {
 
-                        for (var i = 0; i < list.length; i++) {
-                            var task = document.getElementById("task-id-" + list[i][0]);
-                            var isChecked = task.checked;
-
-                            if (isChecked) {
-                                changeStatus(list[i][0]);
+                        if (deleteButton.classList.contains("active")) {
+                            for (var i = 0; i < list.length; i++) {
+                                var task = document.getElementById("task-id-" + list[i][0]);
+                                var isChecked = task.checked;
+    
+                                if (isChecked) {
+                                    changeStatus(list[i][0]);
+                                }
                             }
+    
+                            showTasks();
+                        } else {
+                            clearErrors();
+                            noCheckedTasks.classList.remove("d-none");
+                            noCheckedTasks.classList.add("d-inline");
                         }
 
-                        showTasks();
                     }
 
                     // TIMESTAMP
 
-                    
 
                     function getTimeAndDate() {
                         var time = new Date().toLocaleTimeString();
@@ -340,6 +359,9 @@
                         trsArr.sort(function(a, b) {
                             var tdA = a.children[index].textContent,
                                 tdB = b.children[index].textContent;
+
+                                tdA = tdA.toLowerCase();
+                                tdB = tdB.toLowerCase();
 
                             
                             if(tdA < tdB) {
