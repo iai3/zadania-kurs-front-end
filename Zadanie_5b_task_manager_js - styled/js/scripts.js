@@ -30,6 +30,9 @@
                     var wholeTable = document.getElementById("wholeTable");
                     var ths = wholeTable.querySelectorAll("thead th");
 
+                    var sortingElement;
+                    var sortingOrder;
+
                     // error messages
                     var taskIsEmpty = document.getElementById("taskIsEmpty");
                     var noFinishedTasks = document.getElementById("noFinishedTasks");
@@ -38,6 +41,7 @@
                     // help
                     var helpIcon = document.getElementById("helpIcon");
                     var helpText = document.getElementsByClassName("help");
+
 
                     helpIcon.addEventListener("click", showHelp);
 
@@ -156,7 +160,6 @@
                             var cell3 = row.insertCell(2);
                             cell3.innerHTML = list[i][2] + "<br>" + list[i][1];
 
-                            //localStorage.setItem('taskList', JSON.stringify(list));
                             
 
                             
@@ -168,6 +171,11 @@
                         clearErrors();
                         checkFinished();
 
+
+                        if(sortingElement && sortingOrder) {
+                            sortBy(sortingElement, false, sortingOrder);
+                        }
+
                         
 
                         for (var i = 0; i < list.length; i++) {
@@ -175,12 +183,7 @@
                         }
 
                         var trs = wholeTable.querySelectorAll("tbody tr");
-
-                        // for (var i = 0; i < ths.length; i++) {
-                        //     ths[i].onclick = sortBy;
-                        //     console.log(ths[i]);
-                        // }
-
+                        
                     }
 
                     function clearErrors(){
@@ -365,27 +368,37 @@
 
                     }
 
-                    function sortBy(e) {
-                        var trs = wholeTable.querySelectorAll("tbody tr");
+                    function sortBy(e, changeOrder = true, ord) {
+                        var trs = wholeTable.querySelectorAll("tbody tr:not(.finished)");
+                        var trsFinished = wholeTable.querySelectorAll("tbody tr.finished");
 
                         var target = e.target,
                             thsArr = makeArray(ths),
                             trsArr = makeArray(trs),
+                            trsFinishedArr = makeArray(trsFinished),
+
                             index = thsArr.indexOf(target),
                             documentFragment = document.createDocumentFragment(),
-                            order = (target.className === '' || target.className === 'desc') ? 'asc' : 'desc';
+                            documentFragmentFinished = document.createDocumentFragment();
+
+                            if(changeOrder) {
+                                var order = (target.className === '' || target.className === 'desc') ? 'asc' : 'desc';
+                            } else {
+                                var order = ord;
+                            }
+                           
 
 
                         clearClassName(ths);
 
-                        trsArr.sort(function(a, b) {
+                        function sorting(a, b) {
                             var tdA = a.children[index].textContent,
                                 tdB = b.children[index].textContent;
 
                                 tdA = tdA.toLowerCase();
                                 tdB = tdB.toLowerCase();
 
-                            
+
                             if(tdA < tdB) {
                                 return order === "asc" ? -1 : 1;
                             } else if(tdA > tdB) {
@@ -394,15 +407,30 @@
                                 return 0;
                             }
 
-                        })
+                            
+                            
+
+                        }
+
+                        trsArr.sort(sorting);
+                        trsFinishedArr.sort(sorting);
 
                         trsArr.forEach(function(tr) {
                             documentFragment.appendChild(tr);
                         });
 
+                        trsFinishedArr.forEach(function(tr) {
+                            documentFragment.appendChild(tr);
+                        });
+
+                        sortingElement = e;
+                        sortingOrder = order;
+
                         target.className = order;
-                        wholeTable.querySelector('tbody').appendChild(documentFragment);
                         
+                        wholeTable.querySelector('tbody').appendChild(documentFragment);
+                        wholeTable.querySelector('tbody').appendChild(documentFragmentFinished);
+
                     }
 
 
@@ -410,6 +438,24 @@
 
                     for (var i = 0; i < ths.length; i++) {
                         ths[i].addEventListener('click', sortBy);
+                    }
+
+                    function arraySorting(a, b) {
+                        var tdA = a.children[index].textContent,
+                            tdB = b.children[index].textContent;
+
+                            tdA = tdA.toLowerCase();
+                            tdB = tdB.toLowerCase();
+
+                        
+                        if(tdA < tdB) {
+                            return order === "asc" ? -1 : 1;
+                        } else if(tdA > tdB) {
+                            return order === "asc" ? 1 : -1;
+                        } else {
+                            return 0;
+                        }
+
                     }
                     
                     
