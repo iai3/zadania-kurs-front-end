@@ -78,6 +78,14 @@ input[type="text"]
     text-transform: uppercase;
 }
 
+.btn2:hover {
+    color: rgba(74, 116, 181, 0.2);
+}
+
+.btn2:not(.disabled):hover {
+    color: rgba(74, 116, 181, 0.8);
+}
+
 .divider{
     left:50%;
     top:10%;
@@ -87,7 +95,6 @@ input[type="text"]
 
 
 button i {
-    padding: 0 0.3rem;
     margin: 0 auto;
 }
 
@@ -96,6 +103,22 @@ button i {
     background-color: transparent;
     color: rgba(74, 116, 181, 0.6);
 }
+
+/* HELP */
+
+.help {
+    font-size: 0.8rem;
+    margin-bottom: 0;
+    padding-top: 1rem;
+}
+
+#helpIcon {
+    color: rgba(74, 116, 181, 1);
+    font-size: 1.8rem;
+    padding: 0.4rem;
+}
+
+/* TASKS TABLE */
 
 .tasks-table  {
     background-color: white;
@@ -108,6 +131,10 @@ th {
 
 tr:nth-child(even) {
     background-color: rgba(166, 182, 221, 0.2);
+}
+
+tr:hover {
+    background-color: rgba(166, 182, 221, 0.4);
 }
 
 tr.finished {

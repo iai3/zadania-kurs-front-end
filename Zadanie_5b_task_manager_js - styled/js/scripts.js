@@ -35,6 +35,28 @@
                     var noFinishedTasks = document.getElementById("noFinishedTasks");
                     var noCheckedTasks = document.getElementById("noCheckedTasks");
 
+                    // help
+                    var helpIcon = document.getElementById("helpIcon");
+                    var helpText = document.getElementsByClassName("help");
+
+                    helpIcon.addEventListener("click", showHelp);
+
+                    function showHelp() {
+                        console.log(helpText);
+                        for (var element of helpText) {
+                            console.log(element);
+                            if (element.classList.contains("d-none")) {
+                                element.classList.remove("d-none");
+                                element.classList.add("d-block");
+                            } else {
+                                element.classList.add("d-none");
+                                element.classList.remove("d-block");
+                            }
+                        }
+                        
+                        
+                    }
+
 
 
                     function storage() {

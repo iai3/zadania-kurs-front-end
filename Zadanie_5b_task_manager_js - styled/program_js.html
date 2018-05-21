@@ -27,7 +27,7 @@
                             <p>There are no finished tasks.</p>
                         </div>
                         <div class="errors d-none" id="noCheckedTasks">
-                            <p>There are no checked tasks</p>
+                            <p>There are no checked tasks.</p>
                         </div>
                         <!-- <div class="flex-container">
                             <input type="button" value="Delete"  class="btn2 btn-delete disabled" id="task-form-delete">
@@ -38,20 +38,38 @@
                         <div class="flex-container">
                             <button type="button" class="btn2 btn-delete disabled" id="task-form-delete">
                                 <i class="fas fa-trash"></i>
+                                <p class="help d-none">Delete<br> checked<br> tasks</p>
                             </button>
                             <div class="divider"></div>
                             <button type="button" class="btn2 btn-delete-all disabled" id="task-form-delete-all">
-                                <i class="fas fa-check-square"></i><i class="fas fa-caret-right"></i><i class="fas fa-trash"></i>
+                                <i class="fas fa-check-square"></i>
+                                <i class="fas fa-caret-right"></i>
+                                <i class="fas fa-trash"></i>
+                                <p class="help d-none">Delete<br> finished<br> tasks</p>
                             </button>
                             <div class="divider"></div>
                             <button type="button" class="btn2 btn-status disabled" id="task-form-status">
-                                    <i class="fas fa-square"></i><i class="fas fa-caret-left"></i><i class="fas fa-caret-right"></i><i class="fas fa-check-square"></i>
-                            </button>
+                                <i class="fas fa-square"></i>
+                                <i class="fas fa-caret-left"></i>
+                                <i class="fas fa-caret-right"></i>
+                                <i class="fas fa-check-square"></i>
+                                <p class="help d-none">Change<br> status of<br> checked<br> tasks</p>
+                                </button>
                             <div class="divider"></div>
                             <button type="submit" class="btn2 btn-add disabled" id="task-form-button">
                                 <i class="fas fa-plus-square"></i>
+                                <p class="help d-none">Add new<br> task</p>
                             </button>
                         </div>
+                        <div>
+                            <i class="far fa-question-circle" id="helpIcon"></i>
+                        </div>
+                        <!-- <div class="help flex-container d-none" id="help">
+                            <p>Delete checked tasks</p>
+                            <p>Delete finished tasks</p>
+                            <p>Change status of checked tasks</p>
+                            <p>Add new task</p>
+                        </div> -->
                     </form>
                     
                     <div>
